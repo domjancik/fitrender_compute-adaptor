@@ -1,10 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'fitrender_compute/adaptor/version'
+require 'fitrender/compute_adaptor/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "fitrender_compute-adaptor"
+  spec.name          = "FITRender / Compute Adaptor"
   spec.version       = FitrenderCompute::Adaptor::VERSION
   spec.authors       = ["jancidom"]
   spec.email         = ["jancidom@fit.cvut.cz"]
@@ -29,4 +29,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.9"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_runtime_dependency "soap4r"
 end
