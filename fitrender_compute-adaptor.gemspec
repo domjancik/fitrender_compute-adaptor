@@ -1,18 +1,18 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'fitrender/compute_adaptor/version'
+require 'version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "FITRender / Compute Adaptor"
-  spec.version       = FitrenderCompute::Adaptor::VERSION
-  spec.authors       = ["jancidom"]
-  spec.email         = ["jancidom@fit.cvut.cz"]
+  spec.name          = 'fitrender_compute_adaptor'
+  spec.version       = Fitrender::ComputeAdaptor::VERSION
+  spec.authors       = ['jancidom']
+  spec.email         = ['jancidom@fit.cvut.cz']
 
   spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
   spec.description   = %q{TODO: Write a longer description or delete this line.}
   spec.homepage      = "TODO: Put your gem's website or public repo URL here."
-  spec.license       = "MIT"
+  spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
@@ -29,5 +29,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.9"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_runtime_dependency "soap4r"
+  spec.add_runtime_dependency "sinatra"
+  spec.add_runtime_dependency "haml"
 end

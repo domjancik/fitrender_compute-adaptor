@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+# (C) Dominik Jancik
+# MIT license
+
+$0 = 'fitrender_compute_adaptor'
+
+require 'fitrender_compute_adaptor'
