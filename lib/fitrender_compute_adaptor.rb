@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'sinatra'
+require 'sinatra/json'
 require 'haml'
 
 require_relative 'minify_resources'
