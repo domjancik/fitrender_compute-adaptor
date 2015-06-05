@@ -13,7 +13,16 @@ class FitrenderComputeAdaptor < Sinatra::Application
     begin
       json adaptor.node(params[:id]).to_hash
     rescue Fitrender::NotFoundError
-      json_error 404, "Node #{params[:id]} not found"
+      json_error_not_found "Node #{params[:id]}"
+    end
+  end
+
+  # Job state
+  get '/job/:id' do
+    begin
+      json adaptor.job(params[:id])
+    rescue Fitrender::NotFoundError
+      json_error_not_found "Job #{params[:id]}"
     end
   end
 
@@ -21,6 +30,10 @@ class FitrenderComputeAdaptor < Sinatra::Application
   def json_error(status_code, message)
     status status_code
     json ({ 'error' => message })
+  end
+
+  def json_error_not_found(object_message)
+    json_error 404, "404 Not Found: #{object_message}"
   end
 
   def adaptor
