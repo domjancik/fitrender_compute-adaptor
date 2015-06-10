@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'fitrender/adaptor/condor'
+require 'json'
 
 class FitrenderComputeAdaptor < Sinatra::Application
   ### Nodes
@@ -35,6 +36,32 @@ class FitrenderComputeAdaptor < Sinatra::Application
     json adaptor.renderers.inject([]) { |renderers, renderer| renderers << renderer.to_hash }
   end
 
+  ### Jobs
+
+  # Scene submission, returns a list of job_ids assigned to the scene
+  post '/submit' do
+    begin
+      check_params(:path, :renderer_id, :options)
+      options = JSON.parse(params[:options])
+
+      scene = Fitrender::Adaptor::Scene.new(
+        path: params['path'],
+        renderer_id: params['renderer_id'],
+        options: options,
+      )
+
+      json adaptor.submit(scene)
+    rescue ArgumentError
+      json_error_bad_request('Some of the required parameters (scene_path, renderer_id, options in JSON) are missing')
+    rescue JSON::ParserError
+      json_error_bad_request('The options given are not valid JSON')
+    rescue Fitrender::RendererNotFoundError
+      json_error_bad_request("Invalid renderer - #{params['renderer_id']}")
+    rescue Fitrender::FileNotFoundError
+      json_error_bad_request("File unreachable - #{params['path']}")
+    end
+  end
+
   # Job state
   get '/jobs/:id' do
     begin
@@ -56,8 +83,18 @@ class FitrenderComputeAdaptor < Sinatra::Application
     json ({ 'error' => message })
   end
 
+  def check_params(*required_params)
+    required_params.each do |param|
+      raise ArgumentError unless params.has_key? param.to_s
+    end
+  end
+
   def json_error_not_found(object_message)
     json_error 404, "404 Not Found: #{object_message}"
+  end
+
+  def json_error_bad_request(message)
+    json_error 400, "400 Bad Request: #{message}"
   end
 
   def adaptor
