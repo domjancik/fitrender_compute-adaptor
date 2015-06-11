@@ -50,7 +50,7 @@ class FitrenderComputeAdaptor < Sinatra::Application
         options: options,
       )
 
-      json adaptor.submit(scene)
+      json adaptor.submit(scene).inject([]) { |arr, job| arr << job.to_hash }
     rescue ArgumentError
       json_error_bad_request('Some of the required parameters (scene_path, renderer_id, options in JSON) are missing')
     rescue JSON::ParserError
