@@ -72,9 +72,20 @@ class FitrenderComputeAdaptor < Sinatra::Application
   end
 
   # Adaptor Config
-  get '/config/?' do
-    options = @adaptor.config_list
+  get '/options/?' do
+    options = adaptor.options_list
     json options.inject([]) { |a, option| a << option.to_hash }
+  end
+
+  get '/options/:id' do
+    option = adaptor.option_get params['id']
+    json option.to_hash
+  end
+
+  patch '/options/:id' do
+    return json_error_bad_request 'Missing value parameter' unless params.has_key? 'value'
+    adaptor.option_set_value params['id'], params['value']
+    status 200
   end
 
   private
