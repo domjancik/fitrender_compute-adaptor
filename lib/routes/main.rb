@@ -31,6 +31,24 @@ class FitrenderComputeAdaptor < Sinatra::Application
     end
   end
 
+  # Renderer update options
+  patch '/renderers/:id' do
+    begin
+      renderer = adaptor.renderer(params[:id])
+      puts params
+      params.each do |key, value|
+        puts key
+        next if %w(splat captures id).include? key
+        renderer.option_set_value key, value
+      end
+      json_success 'Renderer updated successfuly'
+    rescue Fitrender::OptionNotFoundError => error
+      json_error_bad_request "Some of the given options are not valid for the renderer. #{error.message}"
+    rescue Fitrender::RendererNotFoundError
+      json_error_not_found "Renderer #{params[:id]}"
+    end
+  end
+
   # Renderer overview
   get '/renderers/?' do
     json adaptor.renderers.inject([]) { |renderers, renderer| renderers << renderer.to_hash }
@@ -85,13 +103,18 @@ class FitrenderComputeAdaptor < Sinatra::Application
   patch '/options/:id' do
     return json_error_bad_request 'Missing value parameter' unless params.has_key? 'value'
     adaptor.option_set_value params['id'], params['value']
-    status 200
+    json_success
   end
 
   private
   def json_error(status_code, message)
     status status_code
     json ({ 'error' => message })
+  end
+
+  def json_success(message = '')
+    status 200
+    json ({ 'success' => message })
   end
 
   def check_params(*required_params)
