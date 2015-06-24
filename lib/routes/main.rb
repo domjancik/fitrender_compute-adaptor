@@ -51,7 +51,7 @@ class FitrenderComputeAdaptor < Sinatra::Application
 
   # Renderer overview
   get '/renderers/?' do
-    json adaptor.renderers.inject([]) { |renderers, renderer| renderers << renderer.to_hash }
+    json adaptor.renderers.inject([]) { |renderers, renderer| renderers << renderer.to_hash(:short) }
   end
 
   ### Jobs
